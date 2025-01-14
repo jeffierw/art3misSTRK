@@ -59,7 +59,7 @@ export const AddressInfoDropdown = ({
 
   function handleConnectBurner(
     e: React.MouseEvent<HTMLButtonElement>,
-    ix: number,
+    ix: number
   ) {
     const connector = connectors.find((it) => it.id == "burner-wallet");
     if (connector && connector instanceof BurnerConnector) {
@@ -75,7 +75,7 @@ export const AddressInfoDropdown = ({
     { id: "" },
     {
       initializeWithValue: false,
-    },
+    }
   );
 
   return (
@@ -141,7 +141,8 @@ export const AddressInfoDropdown = ({
               </CopyToClipboard>
             )}
           </li>
-          <li className={selectingNetwork ? "hidden" : ""}>
+
+          {/* <li className={selectingNetwork ? "hidden" : ""}>
             <label
               htmlFor="qrcode-modal"
               className="btn-sm !rounded-xl flex gap-3 py-3"
@@ -149,7 +150,7 @@ export const AddressInfoDropdown = ({
               <QrCodeIcon className="h-6 w-4 ml-2 sm:ml-0" />
               <span className="whitespace-nowrap">View QR Code</span>
             </label>
-          </li>
+          </li> */}
           {chain.network != "devnet" ? (
             <li className={selectingNetwork ? "hidden" : ""}>
               <button
@@ -235,7 +236,7 @@ export const AddressInfoDropdown = ({
                                 ></BlockieAvatar>
                                 {`${burnerAcc.accountAddress.slice(
                                   0,
-                                  6,
+                                  6
                                 )}...${burnerAcc.accountAddress.slice(-4)}`}
                               </button>
                             </div>
@@ -247,7 +248,7 @@ export const AddressInfoDropdown = ({
                 </div>
                 <div className="backdrop-blur fixed inset-0 z-40"></div>
               </>,
-              document.body,
+              document.body
             )}
 
           {/* TODO: reinstate if needed */}

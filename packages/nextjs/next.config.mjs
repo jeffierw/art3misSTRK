@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 import webpack from "webpack";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 const nextConfig = {
   reactStrictMode: true,
@@ -33,6 +34,7 @@ const nextConfig = {
       new webpack.NormalModuleReplacementPlugin(/^node:(.*)$/, (resource) => {
         resource.request = resource.request.replace(/^node:/, "");
       }),
+      new MiniCssExtractPlugin()
     );
     return config;
   },

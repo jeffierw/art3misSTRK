@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ScaffoldStarkAppWithProviders } from "~~/components/ScaffoldStarkAppWithProviders";
 import "~~/styles/globals.css";
 import { ThemeProvider } from "~~/components/ThemeProvider";
+import { irishGrover } from "~~/fonts/fonts";
 
 export const metadata: Metadata = {
   title: "Scaffold-Stark",
@@ -11,9 +12,9 @@ export const metadata: Metadata = {
 
 const ScaffoldStarkApp = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html suppressHydrationWarning>
+    <html suppressHydrationWarning className={`${irishGrover.variable}`}>
       <body>
-        <ThemeProvider enableSystem>
+        <ThemeProvider defaultTheme="light">
           <ScaffoldStarkAppWithProviders>
             {children}
           </ScaffoldStarkAppWithProviders>

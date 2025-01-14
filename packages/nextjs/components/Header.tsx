@@ -13,6 +13,7 @@ import { devnet } from "@starknet-react/chains";
 import { SwitchTheme } from "./SwitchTheme";
 import { useAccount, useNetwork, useProvider } from "@starknet-react/core";
 import { BlockIdentifier } from "starknet";
+import { FaucetButton } from "./scaffold-stark/FaucetButton";
 
 type HeaderMenuLink = {
   label: string;
@@ -75,7 +76,7 @@ export const Header = () => {
   useOutsideClick(
     //@ts-expect-error refs are supposed to be null by default
     burgerMenuRef,
-    useCallback(() => setIsDrawerOpen(false), []),
+    useCallback(() => setIsDrawerOpen(false), [])
   );
 
   const { targetNetwork } = useTargetNetwork();
@@ -117,8 +118,8 @@ export const Header = () => {
   ]);
 
   return (
-    <div className=" lg:static top-0 navbar min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2">
-      <div className="navbar-start w-auto lg:w-1/2 -mr-2">
+    <div className=" lg:static navbar min-h-0 flex-shrink-0 justify-between z-20 px-0 sm:px-2">
+      {/* <div className="navbar-start w-auto lg:w-1/2 -mr-2">
         <div className="lg:hidden dropdown" ref={burgerMenuRef}>
           <label
             tabIndex={0}
@@ -166,7 +167,7 @@ export const Header = () => {
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">
           <HeaderMenuLinks />
         </ul>
-      </div>
+      </div> */}
       <div className="navbar-end flex-grow mr-2 gap-4">
         {status === "connected" && !isDeployed ? (
           <span className="bg-[#8a45fc] text-[9px] p-1 text-white">
@@ -175,11 +176,11 @@ export const Header = () => {
         ) : null}
         <CustomConnectButton />
         {/* <FaucetButton /> */}
-        <SwitchTheme
+        {/* <SwitchTheme
           className={`pointer-events-auto ${
             isLocalNetwork ? "mb-1 lg:mb-0" : ""
           }`}
-        />
+        /> */}
       </div>
     </div>
   );
