@@ -133,8 +133,39 @@ export const ABI = [
         type: "function",
         inputs: [
           {
+            name: "recipient",
+            type: "core::starknet::contract_address::ContractAddress",
+          },
+          {
             name: "token_uri",
             type: "core::byte_array::ByteArray",
+          },
+        ],
+        outputs: [
+          {
+            type: "core::integer::u256",
+          },
+        ],
+        state_mutability: "external",
+      },
+    ],
+  },
+  {
+    name: "UpgradeableImpl",
+    type: "impl",
+    interface_name: "openzeppelin_upgrades::interface::IUpgradeable",
+  },
+  {
+    name: "openzeppelin_upgrades::interface::IUpgradeable",
+    type: "interface",
+    items: [
+      {
+        name: "upgrade",
+        type: "function",
+        inputs: [
+          {
+            name: "new_class_hash",
+            type: "core::starknet::class_hash::ClassHash",
           },
         ],
         outputs: [],
@@ -322,6 +353,65 @@ export const ABI = [
     ],
   },
   {
+    name: "ERC721EnumerableImpl",
+    type: "impl",
+    interface_name:
+      "openzeppelin_token::erc721::extensions::erc721_enumerable::interface::IERC721Enumerable",
+  },
+  {
+    name: "openzeppelin_token::erc721::extensions::erc721_enumerable::interface::IERC721Enumerable",
+    type: "interface",
+    items: [
+      {
+        name: "total_supply",
+        type: "function",
+        inputs: [],
+        outputs: [
+          {
+            type: "core::integer::u256",
+          },
+        ],
+        state_mutability: "view",
+      },
+      {
+        name: "token_by_index",
+        type: "function",
+        inputs: [
+          {
+            name: "index",
+            type: "core::integer::u256",
+          },
+        ],
+        outputs: [
+          {
+            type: "core::integer::u256",
+          },
+        ],
+        state_mutability: "view",
+      },
+      {
+        name: "token_of_owner_by_index",
+        type: "function",
+        inputs: [
+          {
+            name: "owner",
+            type: "core::starknet::contract_address::ContractAddress",
+          },
+          {
+            name: "index",
+            type: "core::integer::u256",
+          },
+        ],
+        outputs: [
+          {
+            type: "core::integer::u256",
+          },
+        ],
+        state_mutability: "view",
+      },
+    ],
+  },
+  {
     name: "ERC721CamelOnlyImpl",
     type: "impl",
     interface_name: "openzeppelin_token::erc721::interface::IERC721CamelOnly",
@@ -502,6 +592,42 @@ export const ABI = [
     ],
   },
   {
+    name: "CounterImpl",
+    type: "impl",
+    interface_name: "art3mis::components::Counter::ICounter",
+  },
+  {
+    name: "art3mis::components::Counter::ICounter",
+    type: "interface",
+    items: [
+      {
+        name: "current",
+        type: "function",
+        inputs: [],
+        outputs: [
+          {
+            type: "core::integer::u256",
+          },
+        ],
+        state_mutability: "view",
+      },
+      {
+        name: "increment",
+        type: "function",
+        inputs: [],
+        outputs: [],
+        state_mutability: "external",
+      },
+      {
+        name: "decrement",
+        type: "function",
+        inputs: [],
+        outputs: [],
+        state_mutability: "external",
+      },
+    ],
+  },
+  {
     name: "constructor",
     type: "constructor",
     inputs: [],
@@ -652,6 +778,42 @@ export const ABI = [
     ],
   },
   {
+    kind: "struct",
+    name: "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Upgraded",
+    type: "event",
+    members: [
+      {
+        kind: "data",
+        name: "class_hash",
+        type: "core::starknet::class_hash::ClassHash",
+      },
+    ],
+  },
+  {
+    kind: "enum",
+    name: "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Event",
+    type: "event",
+    variants: [
+      {
+        kind: "nested",
+        name: "Upgraded",
+        type: "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Upgraded",
+      },
+    ],
+  },
+  {
+    kind: "enum",
+    name: "art3mis::components::Counter::CounterComponent::Event",
+    type: "event",
+    variants: [],
+  },
+  {
+    kind: "enum",
+    name: "openzeppelin_token::erc721::extensions::erc721_enumerable::erc721_enumerable::ERC721EnumerableComponent::Event",
+    type: "event",
+    variants: [],
+  },
+  {
     kind: "enum",
     name: "art3mis::contract::Tarot::Event",
     type: "event",
@@ -670,6 +832,21 @@ export const ABI = [
         kind: "flat",
         name: "OwnableEvent",
         type: "openzeppelin_access::ownable::ownable::OwnableComponent::Event",
+      },
+      {
+        kind: "flat",
+        name: "UpgradeableEvent",
+        type: "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Event",
+      },
+      {
+        kind: "nested",
+        name: "CounterEvent",
+        type: "art3mis::components::Counter::CounterComponent::Event",
+      },
+      {
+        kind: "nested",
+        name: "EnumerableEvent",
+        type: "openzeppelin_token::erc721::extensions::erc721_enumerable::erc721_enumerable::ERC721EnumerableComponent::Event",
       },
     ],
   },

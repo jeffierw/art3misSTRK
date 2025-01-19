@@ -18,11 +18,11 @@ const fetchFromApi = ({
     .catch((error) => console.error("Error:", error));
 
 export const addToIPFS = (yourJSON: object) =>
-  fetchFromApi({ path: "/api/ipfs/add", method: "Post", body: yourJSON });
+  fetchFromApi({ path: "/api/add", method: "Post", body: yourJSON });
 
 export const getMetadataFromIPFS = (ipfsHash: string) =>
   fetchFromApi({
-    path: "/api/ipfs/get-metadata",
+    path: "/api/get-metadata",
     method: "Post",
     body: { ipfsHash },
   });

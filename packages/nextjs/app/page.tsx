@@ -19,7 +19,9 @@ import { ABI } from "./abis/abi";
 import { nftType } from "./abis/nft_type";
 import type { Abi } from "starknet";
 import { abi } from "./debug/_components/contract/__test__/mock/mockABI";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-stark/useScaffoldWriteContract";
 import { addToIPFS } from "~~/utils/simpleNFT/ipfs-fetch";
+import { NextPage } from "next";
 
 const FireLeft = dynamic(() => import("~~/components/FireLeft"), {
   ssr: false,
@@ -28,8 +30,8 @@ const FireRight = dynamic(() => import("~~/components/FireRight"), {
   ssr: false,
 });
 
-function Home() {
-  const { isConnected: connected, address } = useAccount();
+const Home: NextPage = () => {
+  const { isConnected: connected, address: connectedAddress } = useAccount();
   const { toast } = useToast();
   const router = useRouter();
   const [bgLoading, setBgLoading] = useState(true);
@@ -53,6 +55,12 @@ function Home() {
   const [mintSuccess, setMintSuccess] = useState(false);
   const [nftData, setNftData] = useState({});
   const [uploadedItem, setUploadedItem] = useState<any>();
+
+  const { sendAsync: mintItem } = useScaffoldWriteContract({
+    contractName: "Tarot",
+    functionName: "mint",
+    args: [connectedAddress, ""],
+  });
 
   const { data: drawCardData, refetch: drawCardRefresh } = useReadContract({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
@@ -140,13 +148,11 @@ function Home() {
           setCardName(card);
           const cardUrl = `/cards/${cardNumber}.png`;
           let nftData = nftType;
-          nftData.description = card;
-          nftData.image = `ipfs://bafybeiel3ftyc3pkjfnb5dseioeuoewr5xqqpxqyb2737e4shfkvnbrkuy/${cardNumber}.png`;
-          nftData.attributes[0].value = card;
-          nftData.attributes[1].value = inputValue;
-          nftData.attributes[2].value = gptData.choices[0].message.content;
-          nftData.attributes[3].value = `ipfs://bafybeiel3ftyc3pkjfnb5dseioeuoewr5xqqpxqyb2737e4shfkvnbrkuy/${cardNumber}.png`;
-          nftData.attributes[4].value = position;
+          nftData.name = drawCardData;
+          nftData.image = `https://ipfs.io/ipfs/bafybeiel3ftyc3pkjfnb5dseioeuoewr5xqqpxqyb2737e4shfkvnbrkuy/${cardNumber}.png`;
+          nftData.attributes[0].value = inputValue;
+          nftData.attributes[1].value = gptData.choices[0].message.content;
+          nftData.attributes[2].value = new Date().getTime().toString();
           setNftData(nftData);
           setChoseCard(cardUrl);
           setChoseContent(gptData.choices[0].message.content);
@@ -216,36 +222,39 @@ function Home() {
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
   });
 
-  const {
-    isError,
-    error,
-    sendAsync: mint,
-    data,
-    isSuccess: isMintSuccess,
-    isPending,
-  } = useSendTransaction({
-    calls:
-      contract && address
-        ? [contract.populate("mint", [address, uploadedItem?.path])]
-        : undefined,
-  });
+  // const {
+  //   isError,
+  //   error,
+  //   sendAsync: mint,
+  //   data,
+  //   isSuccess: isMintSuccess,
+  //   isPending,
+  // } = useSendTransaction({
+  //   calls:
+  //     contract && connectedAddress
+  //       ? [contract.populate("mint", [uploadedItem])]
+  //       : undefined,
+  // });
 
   const handleMintClick = async () => {
     try {
       setLoading(true);
       const uploadedItem: any = await addToIPFS(nftData);
-      setUploadedItem(uploadedItem);
-      await mint();
-      console.log("mint", data, nftData);
-      if (isMintSuccess) {
-        toast({
-          description: "Mint Card Success~",
-          className: "bg-[#573019] text-white",
-        });
-        setTimeout(() => {
-          setMintSuccess(true);
-        }, 2000);
-      }
+      const res = await mintItem({
+        args: [connectedAddress, uploadedItem.path],
+      });
+      // setUploadedItem(uploadedItem.path);
+      // await mint();
+      console.log("mint", res, nftData);
+      // if (isMintSuccess) {
+      //   toast({
+      //     description: "Mint Card Success~",
+      //     className: "bg-[#573019] text-white",
+      //   });
+      //   setTimeout(() => {
+      //     setMintSuccess(true);
+      //   }, 2000);
+      // }
     } catch (error) {
       toast({
         title: "Error",
@@ -327,7 +336,10 @@ I've discovered the most magical Web3 tarot card project—Art3misSTRK.
             >
               <div className="flex flex-row items-center gap-2">
                 <CustomConnectButton />
-                <button className="btn hidden md:block md:leading-7 lg:leading-7 bg-transparent btn-sm px-6 py-[0.35rem] dropdown-toggle gap-0 !h-auto border border-[#5c4fe5] ">
+                <button
+                  onClick={goProfile}
+                  className="btn hidden md:block md:leading-7 lg:leading-7 bg-transparent btn-sm px-6 py-[0.35rem] dropdown-toggle gap-0 !h-auto border border-[#5c4fe5] "
+                >
                   Profile
                 </button>
               </div>
@@ -1100,6 +1112,6 @@ I've discovered the most magical Web3 tarot card project—Art3misSTRK.
       )}
     </div>
   );
-}
+};
 
 export default Home;

@@ -1,6 +1,6 @@
-export const convertUrl = (url: string) => {
-  if (url.startsWith("ipfs://")) {
-    const withoutPrefix = url.replace("ipfs://", "");
+export const convertUrl = (url: string | undefined) => {
+  if (url && url.startsWith("https://ipfs.io/ipfs/")) {
+    const withoutPrefix = url.replace("https://ipfs.io/ipfs/", "");
     const pathParts = withoutPrefix.split("/");
     return `/cards/${pathParts[1]}`;
   } else {

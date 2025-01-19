@@ -1,26 +1,20 @@
 export const nftType = {
-  name: "art3misSTRK",
-  description: "",
+  description: "Art3misOracle Major Arcana Reading",
+  external_url:
+    "https://ipfs.io/ipfs/bafybeiel3ftyc3pkjfnb5dseioeuoewr5xqqpxqyb2737e4shfkvnbrkuy/",
   image: "",
+  name: "",
   attributes: [
     {
-      trait_type: "name",
+      trait_type: "Question",
       value: "",
     },
     {
-      trait_type: "question",
+      trait_type: "Answer",
       value: "",
     },
     {
-      trait_type: "answer",
-      value: "",
-    },
-    {
-      trait_type: "image",
-      value: "",
-    },
-    {
-      trait_type: "position",
+      trait_type: "timestamp",
       value: "",
     },
   ],
