@@ -33,8 +33,8 @@ const nextConfig = {
     config.plugins.push(
       new webpack.NormalModuleReplacementPlugin(/^node:(.*)$/, (resource) => {
         resource.request = resource.request.replace(/^node:/, "");
-      }),
-      new MiniCssExtractPlugin()
+      })
+      // new MiniCssExtractPlugin()
     );
     return config;
   },

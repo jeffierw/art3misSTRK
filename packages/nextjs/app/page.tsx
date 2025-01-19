@@ -13,7 +13,7 @@ import { Loading } from "~~/components/Loading";
 import { motion, AnimatePresence } from "motion/react";
 import { useToast } from "~~/hooks/use-toast";
 import dynamic from "next/dynamic";
-import { romanToNumberMap } from "~~/utils/helpers";
+import { romanToNumberMap, decodeByteArray } from "~~/utils/helpers";
 import { useRouter } from "next/navigation";
 import { ABI } from "./abis/abi";
 import { nftType } from "./abis/nft_type";
@@ -22,6 +22,8 @@ import { abi } from "./debug/_components/contract/__test__/mock/mockABI";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-stark/useScaffoldWriteContract";
 import { addToIPFS } from "~~/utils/simpleNFT/ipfs-fetch";
 import { NextPage } from "next";
+import { useScaffoldContract } from "~~/hooks/scaffold-stark/useScaffoldContract";
+import { useScaffoldReadContract } from "~~/hooks/scaffold-stark/useScaffoldReadContract";
 
 const FireLeft = dynamic(() => import("~~/components/FireLeft"), {
   ssr: false,
@@ -62,12 +64,24 @@ const Home: NextPage = () => {
     args: [connectedAddress, ""],
   });
 
-  const { data: drawCardData, refetch: drawCardRefresh } = useReadContract({
+  const { data: yourCollectibleContract } = useScaffoldContract({
+    contractName: "Tarot",
+  });
+
+  const { data: drawCardByteArray, refetch: drawCardRefresh } =
+    useScaffoldReadContract({
+      contractName: "Tarot",
+      functionName: "draw_card",
+      args: [],
+      enabled: !!inputValue,
+    });
+
+  const { data: drawCardData2, refetch: drawCardRefresh2 } = useReadContract({
     address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
     functionName: "draw_card",
     abi: ABI,
     args: [],
-    enabled: !!inputValue, // 输入内容后调用
+    enabled: !!inputValue,
   });
 
   useEffect(() => {
@@ -120,9 +134,10 @@ const Home: NextPage = () => {
       try {
         await drawCardRefresh();
 
-        console.log("drawcard", drawCardData);
+        console.log("drawcard", drawCardByteArray);
 
-        if (drawCardData) {
+        if (drawCardByteArray) {
+          const drawCardData = drawCardByteArray as unknown as string;
           const romanNumber = drawCardData.split(" ")[0];
           const cardNumber = romanToNumberMap.get(romanNumber);
           const card = drawCardData.split(",")[0];
@@ -216,11 +231,6 @@ const Home: NextPage = () => {
     setChoseCardVisible(false);
     setClickedCard(true);
   }
-
-  const { contract } = useContract({
-    abi: ABI as Abi,
-    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS as `0x${string}`,
-  });
 
   // const {
   //   isError,

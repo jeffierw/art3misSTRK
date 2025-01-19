@@ -9,6 +9,13 @@ export const convertUrl = (url: string | undefined) => {
   return url;
 };
 
+export const decodeByteArray = (uint8Array: Uint8Array) => {
+  const byteArray = new Uint8Array(uint8Array);
+  const decoder = new TextDecoder("utf-8");
+  const str = decoder.decode(byteArray);
+  return str;
+};
+
 export const romanToNumberMap = new Map([
   ["0", 0],
   ["I", 1],
